@@ -1,0 +1,41 @@
+主页部分：
+1.关键字查询
+2.默认最新时间展示
+
+内容浏览页：
+
+
+添加记录页：
+
+
+统计分析推荐页：
+
+我的：
+
+
+账号
+name   string
+uid     int
+password    string
+tel      string
+
+
+
+
+数据
+uid       int
+Did       long
+ctime    string
+cpos     string
+time     string
+pos      string
+text     string
+img      地址string
+music      地址string
+video考虑  
+是否允许其他人可见    boolean
+
+
+
+
+
