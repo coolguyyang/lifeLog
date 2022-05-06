@@ -1,10 +1,6 @@
 <template>
   <div class="first">
-    <div
-      v-if="isleft"
-      class="back iconfont icon-xiangzuo"
-      @click="goback()"
-    ></div>
+    <van-icon name="arrow-left" v-if="isleft" class="back" @click="goback()" />
     <div v-if="searchBar" class="search">
       <input
         v-model="searchKey"
@@ -15,7 +11,9 @@
         <van-icon name="search" />
       </div>
     </div>
-    <div v-else class="title">lifelog<span v-if="range">({{range}})</span></div>
+    <div v-else class="title">
+      lifelog<span v-if="range">({{ range }})</span>
+    </div>
     <img v-if="isright === true" src="../assets/img/index-lead.png" alt="=" />
     <div v-if="isright === false" class="save" @click="save()">保存</div>
   </div>
@@ -29,7 +27,7 @@ export default {
       searchKey: '',
     }
   },
-  props: ['isleft', 'isright', 'save', 'searchBar', 'search','range'],
+  props: ['isleft', 'isright', 'save', 'searchBar', 'search', 'range'],
   methods: {
     goback() {
       this.$router.go(-1)
@@ -64,8 +62,8 @@ export default {
   position: absolute;
   top: 0.186667rem;
   left: 4rem;
-  span{
-    font-size: .4rem;
+  span {
+    font-size: 0.4rem;
   }
 }
 .search {

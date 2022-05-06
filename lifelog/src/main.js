@@ -1,18 +1,29 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import BMapGL from 'vue-baidu-map'
+import Vue from "vue"
+import App from "./App.vue"
+import router from "./router"
+import store from "./store"
+import BMapGL from "vue-baidu-map"
 import {
-  Cell, Icon, Overlay, DatetimePicker, Popup,
-  Field, CellGroup, Uploader, Popover, DropdownMenu,
-  DropdownItem, Lazyload, Tab, Tabs, Image as VanImage,
+  Cell,
+  Icon,
+  Overlay,
+  DatetimePicker,
+  Popup,
+  Field,
+  CellGroup,
+  Uploader,
+  Popover,
+  DropdownMenu,
+  DropdownItem,
+  Lazyload,
+  Tab,
+  Tabs,
+  Image as VanImage,
   Loading
 } from "vant"
 
 
-import 'lib-flexible'
-import './assets/font/iconfont.css'
+import "lib-flexible"
 Vue.use(BMapGL, {
   ak: 'EsCjaTRh6w4qLow45777ZmAS0gT8rlKS'
 })
