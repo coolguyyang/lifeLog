@@ -12,7 +12,7 @@
         <div class="bar" @click="barType = !barType"></div>
       </template>
     </van-popover>
-    <div v-show="changeType" class="info-show">
+    <div v-if="changeType" class="info-show">
       <van-tabs
         class="searchBar"
         color="#fb7299"
@@ -45,18 +45,16 @@
         </router-link>
       </div>
     </div>
-    <div v-show="!changeType" class="map-show">
+    <div v-if="!changeType" class="map-show">
       <baidu-map class="map" :center="center" :zoom="zoom" @ready="handler">
-        <template v-for="(v, i) in posInfo">
-          <template v-for="(p, j) in v[1]">
-            <bm-marker
-              v-if="p.cpos"
-              :key="'p' + i + j"
-              :position="p.cpos.point"
-              @click="infoShow(v,p)"
-            >
-            </bm-marker>
-          </template>
+        <template v-for="(v, i) in info">
+          <bm-marker
+            v-if="v.cpos"
+            :key="'p' + i"
+            :position="v.cpos.point"
+            @click="infoShow(i)"
+          >
+          </bm-marker>
         </template>
       </baidu-map>
       <van-popup
@@ -65,11 +63,31 @@
         :style="{ height: '84%' }"
         round
         :overlay="false"
-        :closeable="true"
         :close-on-click-overlay="false"
       >
         <div class="map-info-detail" v-if="mapDetail.length !== 0">
-          <div class="detail-pos">{{ mapDetail.lid}}{{mapDetail.text}}{{mapDetail.cpos}}</div>
+          <div class="map-head">
+            <span>{{ mapDetail[0].cpos.address }}</span>
+            <van-icon class="close" name="cross" @click="mapShow = false" />
+          </div>
+          <div class="detail-pos">
+            <router-link
+              v-for="i in mapDetail"
+              :to="{ name: 'Info', query: { uid: i.uid, lid: i.lid } }"
+              :key="i.lid"
+            >
+              <div class="item">
+                <div class="ph" v-if="i.img[0]">
+                  <img v-lazy="i.img[0].url" :alt="i.img[0].name" />
+                </div>
+                <div class="info">
+                  <div class="text">{{ i.text }}</div>
+                  <div class="pos">{{ i.cpos.address }}</div>
+                  <div class="time">{{ i.ctime | timeTranform }}</div>
+                </div>
+              </div>
+            </router-link>
+          </div>
         </div>
       </van-popup>
     </div>
@@ -114,19 +132,6 @@ export default {
       }
       return select
     },
-    posInfo() {
-      let map = new Map()
-      this.info.forEach((v) => {
-        if (!map.has(v.cpos.address)) {
-          map.set(v.cpos.address, [v])
-        } else {
-          map.get(v.cpos.address).push(v)
-        }
-      })
-      let infoP = [...map.entries()]
-      console.log('111', infoP)
-      return infoP
-    },
   },
   methods: {
     handler(e) {
@@ -143,10 +148,13 @@ export default {
         this.center = p.point
       })
     },
-    infoShow(v,p) {
+    infoShow(i) {
       this.mapShow = true
-      console.log('show', v,p)
-      this.mapDetail = p
+      console.log('show', i)
+      let samePos = this.info.filter((v) => {
+        return this.info[i].cpos.address === v.cpos.address
+      })
+      this.mapDetail = samePos
     },
     selectBar(actions) {
       if (actions.text === '切换') {
@@ -202,7 +210,7 @@ export default {
       await $findBy(this.seachData).then((res) => {
         if (res.data.status === 0) {
           this.info = res.data.data
-          console.log(this.info)
+          console.log('info', this.info)
         } else {
           console.log(res)
         }
@@ -293,7 +301,71 @@ export default {
       height: calc(100vh - 2.6667rem);
     }
     .map-info-detail {
+      position: relative;
       width: 5rem;
+      height: 100%;
+      padding: 0 0.2667rem;
+      overflow: hidden;
+      .map-head {
+        display: flex;
+        margin-top: 0.2667rem;
+        justify-content: space-between;
+        .close {
+          font-size: 0.5333rem;
+        }
+        span {
+          width: 60%;
+          font-weight: bold;
+        }
+      }
+      .detail-pos {
+        height: calc(100% - 1.28rem);;
+        overflow-y: scroll;
+        a {
+          display: block;
+          text-decoration: none;
+          padding-left: 0.2rem;
+          margin: .1067rem;
+          color: #666;
+          background: #fff;
+          box-shadow: 0 .1067rem 0.16rem #ebedf0;
+        }
+        .item {
+          display: flex;
+          width: 100%;
+          .ph {
+            height: 1.28rem;
+            margin-top: 0.16rem;
+            img {
+              width: 1.44rem;
+              height: 1.2rem;
+            }
+          }
+          .info {
+            width: calc(100% - 1.44rem);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: .16rem .1867rem .16rem 0;
+            margin-left: .2667rem;
+            height: 1.2rem;
+            font-size: 0.16rem;
+            color: #939393;
+            .text {
+              width: 100%;
+              height: .72rem;
+              line-height: .24rem;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;
+              font-size: .2133rem;
+              color: #333333;
+            }
+          }
+        }
+      }
     }
   }
 }
