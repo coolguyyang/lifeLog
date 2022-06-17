@@ -222,6 +222,9 @@ export default {
     mytitle,
   },
   activated() {
+    if(this.seachData.uid){
+      this.seachData.uid =this.$store.getters.uid
+    }
     this.findData()
   },
 }

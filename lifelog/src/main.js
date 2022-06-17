@@ -25,7 +25,7 @@ import {
 
 import "lib-flexible"
 Vue.use(BMapGL, {
-  ak: 'EsCjaTRh6w4qLow45777ZmAS0gT8rlKS'
+  ak: 'EsCjaTRh6w4qLow45777ZmAS0gT8rlKS' //去百度地图官网申请的ak
 })
 
 Vue.use(Cell).use(Icon).use(Overlay).use(DatetimePicker).use(Popup).use(Field)
